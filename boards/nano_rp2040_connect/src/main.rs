@@ -162,7 +162,7 @@ impl KernelResources<Rp2040<'static, Rp2040DefaultPeripherals<'static>>> for Nan
 /// to send the RP2040 back in the bootloader so that all the boot
 /// sequence is performed.
 #[no_mangle]
-#[unsafe(naked)]
+#[naked]
 pub unsafe extern "C" fn jump_to_bootloader() {
     use core::arch::naked_asm;
     naked_asm!(

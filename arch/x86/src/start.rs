@@ -5,9 +5,10 @@
 use core::arch::naked_asm;
 
 #[unsafe(link_section = ".x86.start")]
-#[unsafe(naked)]
+#[naked]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn start() {
+    unsafe {
     naked_asm!(
         "
     # Initialize the stack
@@ -49,4 +50,5 @@ pub unsafe extern "C" fn start() {
 
 "
     );
+    }
 }

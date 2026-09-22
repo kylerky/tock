@@ -35,9 +35,10 @@
 
 use core::arch::naked_asm;
 
-#[unsafe(naked)]
+#[naked]
 #[unsafe(no_mangle)]
 pub extern "C" fn switch_to_user() {
+    unsafe {
     naked_asm!(
         "
     # Save kernel state
@@ -94,4 +95,5 @@ pub extern "C" fn switch_to_user() {
 
     iretd"
     );
+    }
 }

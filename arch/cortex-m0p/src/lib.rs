@@ -4,6 +4,7 @@
 
 //! Shared implementations for ARM Cortex-M0+ MCUs.
 
+#![feature(naked_functions)]
 #![no_std]
 
 use core::fmt::Write;
@@ -42,7 +43,7 @@ pub unsafe extern "C" fn svc_handler() {
 }
 
 #[cfg(any(doc, all(target_arch = "arm", target_os = "none")))]
-#[unsafe(naked)]
+#[naked]
 pub unsafe extern "C" fn svc_handler() {
     use core::arch::naked_asm;
     naked_asm!(

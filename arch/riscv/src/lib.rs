@@ -5,6 +5,7 @@
 //! Shared support for RISC-V architectures.
 
 #![no_std]
+#![feature(naked_functions)]
 
 use core::fmt::Write;
 
@@ -58,9 +59,10 @@ extern "C" {
 /// 3. Finally it calls `main()`, the main entry point for Tock boards.
 #[cfg(any(doc, all(target_arch = "riscv32", target_os = "none")))]
 #[link_section = ".riscv.start"]
-#[unsafe(naked)]
+#[naked]
 pub extern "C" fn _start() {
     use core::arch::naked_asm;
+    unsafe {
     naked_asm!(
         "
     // Set the global pointer register using the variable defined in the
@@ -139,6 +141,7 @@ pub extern "C" fn _start() {
         edata = sym _erelocate,
         etext = sym _etext,
     );
+    }
 }
 
 // Mock implementation for tests on Travis-CI.
@@ -283,9 +286,10 @@ pub extern "C" fn _start_trap() {
 // boundary. Thus, ensure that this function is exported under this stable
 // symbol name.
 #[export_name = "_start_trap"]
-#[unsafe(naked)]
+#[naked]
 pub extern "C" fn _start_trap() {
     use core::arch::naked_asm;
+    unsafe {
     naked_asm!(
         "
     // This is the global trap handler. By default, Tock expects this
@@ -421,6 +425,8 @@ pub extern "C" fn _start_trap() {
         estack = sym _estack,
         sstack = sym _sstack,
     );
+
+    }
 }
 
 /// RISC-V semihosting needs three exact instructions in uncompressed form.

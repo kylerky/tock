@@ -456,7 +456,7 @@ pub extern "C" fn _earlgrey_start_trap_vectored() {
 
 #[cfg(any(doc, all(target_arch = "riscv32", target_os = "none")))]
 #[link_section = ".riscv.trap_vectored"]
-#[unsafe(naked)]
+#[naked]
 pub extern "C" fn _earlgrey_start_trap_vectored() -> ! {
     use core::arch::naked_asm;
     // According to the Ibex user manual:

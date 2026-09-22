@@ -34,6 +34,8 @@
 //! * The CPU is executing at ring 0
 //! * The CPU has I/O privileges
 
+#![feature(naked_functions)]
+
 #![deny(unsafe_op_in_unsafe_fn)]
 #![no_std]
 mod boundary;

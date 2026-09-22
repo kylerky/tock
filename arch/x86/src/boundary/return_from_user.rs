@@ -35,9 +35,10 @@
 
 use core::arch::naked_asm;
 
-#[unsafe(naked)]
+#[naked]
 #[unsafe(no_mangle)]
 pub extern "C" fn return_from_user() {
+    unsafe {
     naked_asm!(
         "
         mov     ecx, dword ptr [esp+76]       # UserContext
@@ -98,4 +99,5 @@ pub extern "C" fn return_from_user() {
         ret
 "
     );
+    }
 }

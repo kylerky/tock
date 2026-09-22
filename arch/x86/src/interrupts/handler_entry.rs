@@ -4,9 +4,10 @@
 
 use core::arch::naked_asm;
 
-#[unsafe(naked)]
+#[naked]
 #[unsafe(no_mangle)]
 pub extern "C" fn handler_entry() {
+    unsafe {
     naked_asm!(
         "
     # Save CPU state of the interrupted procedure. We will be calling cdecl functions, so we only
@@ -86,4 +87,5 @@ pub extern "C" fn handler_entry() {
 
 "
     );
+    }
 }
