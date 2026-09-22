@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 // Copyright Tock Contributors 2024.
 
+#![feature(cell_update)]
+
 #![forbid(unsafe_code)]
 #![no_std]
 

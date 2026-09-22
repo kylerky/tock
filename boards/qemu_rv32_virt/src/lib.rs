@@ -41,7 +41,7 @@ type SchedulerInUse = components::sched::cooperative::CooperativeComponentType;
 static PANIC_RESOURCES: SingleThreadValue<PanicResources<ChipHw, ProcessPrinter>> =
     SingleThreadValue::new(PanicResources::new());
 
-kernel::stack_size! {0x8000}
+kernel::stack_size! {0x80000}
 
 /// A structure representing this platform that holds references to all
 /// capsules for this platform. We've included an alarm and console.

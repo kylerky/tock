@@ -55,4 +55,8 @@ run: $(TARGET_PATH)/release/$(PLATFORM).elf
 	$(QEMU_BASE_CMDLINE) \
 	  -kernel $<
 
+.PHONY: install
+install: $(TARGET_PATH)/release/$(PLATFORM).bin
+	tockloader flash --address 0x80000000 $<
+
 # todo: add run-app target

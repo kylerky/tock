@@ -13,7 +13,7 @@ MEMORY
     rom   (rx) : ORIGIN = 0x00100000, LENGTH = 0x50000
     prog  (rx) : ORIGIN = 0x00150000, LENGTH = 0xC0000
     ram  (rwx) : ORIGIN = 0x00210000, LENGTH = 0x40000
-    pages (rw) : ORIGIN = 0x00250000, LENGTH = 0x2000
+    pages (rw) : ORIGIN = 0x00250000, LENGTH = 0x3000
 }
 
 /**
