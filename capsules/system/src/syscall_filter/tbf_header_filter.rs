@@ -94,6 +94,7 @@ impl SyscallFilter for TbfHeaderFilterDefaultAllow {
 
             // Non-filterable system calls
             syscall::Syscall::Yield { .. }
+            | syscall::Syscall::Perf { .. }
             | syscall::Syscall::Memop { .. }
             | syscall::Syscall::Exit { .. } => Ok(()),
         }

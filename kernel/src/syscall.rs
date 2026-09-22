@@ -93,6 +93,7 @@ pub enum SyscallClass {
     Memop = 5,
     Exit = 6,
     UserspaceReadableAllow = 7,
+    Perf = 8,
 }
 
 /// Enumeration of the yield system calls based on the Yield identifier
@@ -133,6 +134,7 @@ impl TryFrom<u8> for SyscallClass {
             5 => Ok(SyscallClass::Memop),
             6 => Ok(SyscallClass::Exit),
             7 => Ok(SyscallClass::UserspaceReadableAllow),
+            8 => Ok(SyscallClass::Perf),
             i => Err(i),
         }
     }
@@ -221,6 +223,10 @@ pub enum Syscall {
         arg0: usize,
     },
 
+    Perf {
+        operation: usize,
+    },
+
     /// Structure representing an invocation of the Exit system call class.
     Exit {
         /// The exit identifier.
@@ -285,6 +291,9 @@ impl Syscall {
             Ok(SyscallClass::Memop) => Some(Syscall::Memop {
                 operand: r0,
                 arg0: r1.as_usize(),
+            }),
+            Ok(SyscallClass::Perf) => Some(Syscall::Perf {
+                operation: r0,
             }),
             Ok(SyscallClass::Exit) => Some(Syscall::Exit {
                 which: r0,

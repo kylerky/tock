@@ -800,6 +800,24 @@ impl Kernel {
 
         // Handle each of the syscalls.
         match syscall {
+            Syscall::Perf { operation } => {
+                let dwt_ctl: *mut u32 = 0xE0001000 as *mut u32;
+                let dwt_cycles: *mut u32 = 0xE0001004 as *mut u32;
+                let cycle = unsafe {
+                    core::ptr::write_volatile(dwt_ctl, core::ptr::read_volatile(dwt_ctl) | 1);
+                    core::ptr::read_volatile(dwt_cycles)
+                };
+                if config::CONFIG.trace_syscalls {
+                    debug!(
+                        "[{:?}] perf({}) = {}",
+                        process.processid(),
+                        operation,
+                        cycle
+                    );
+                }
+
+                process.set_syscall_return_value(SyscallReturn::SuccessU32(cycle));
+            },
             Syscall::Memop { operand, arg0 } => {
                 let rval = memop::memop(process, operand, arg0);
                 if config::CONFIG.trace_syscalls {
@@ -1403,6 +1421,7 @@ impl Kernel {
                         process.set_syscall_return_value(res);
                     }
                     Syscall::Yield { .. }
+                    | Syscall::Perf { .. }
                     | Syscall::Exit { .. }
                     | Syscall::Memop { .. } => {
                         // These variants must not be reachable due to the outer
