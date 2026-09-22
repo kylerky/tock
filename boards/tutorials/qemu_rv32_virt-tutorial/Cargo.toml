@@ -6,7 +6,7 @@
 name = "qemu_rv32_virt-tutorial"
 version.workspace = true
 authors.workspace = true
-build = "../../build.rs"
+#build = "../../build.rs"
 edition.workspace = true
 
 [dependencies]
@@ -26,6 +26,7 @@ tock-tbf = { path = "../../../libraries/tock-tbf" }
 
 [build-dependencies]
 tock_build_scripts = { path = "../../build_scripts" }
+cc = "1"
 
 [lints]
 workspace = true

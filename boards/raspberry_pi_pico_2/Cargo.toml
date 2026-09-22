@@ -6,7 +6,7 @@
 name = "raspberry_pi_pico_2"
 version.workspace = true
 authors.workspace = true
-build = "../build.rs"
+build = "build.rs"
 edition.workspace = true
 
 [dependencies]
@@ -22,6 +22,7 @@ capsules-system = { path = "../../capsules/system" }
 
 [build-dependencies]
 tock_build_scripts = { path = "../build_scripts" }
+cc = "1.2"
 
 [lints]
 workspace = true
