@@ -1854,20 +1854,24 @@ pub mod kernel_protection {
                 flash.0.pmpaddr(),
             );
 
+            kernel::debug!("Setting up {}-th entry", AVAILABLE_ENTRIES - 1);
+
             // Now that the kernel has explicit region definitions for any
             // memory that it needs to have access to, we can deny other memory
             // accesses in our very last rule (n - 1):
             write_pmpaddr_pmpcfg(
                 AVAILABLE_ENTRIES - 1,
                 (pmpcfg_octet::a::NAPOT
-                    + pmpcfg_octet::r::CLEAR
-                    + pmpcfg_octet::w::CLEAR
+                    + pmpcfg_octet::r::SET
+                    + pmpcfg_octet::w::SET
                     + pmpcfg_octet::x::CLEAR
                     + pmpcfg_octet::l::SET)
                     .into(),
                 // the entire address space:
                 0x7FFFFFFF,
             );
+
+            kernel::debug!("Setting up {}-th entry done", AVAILABLE_ENTRIES - 1);
 
             // Finally, we configure the non-locked user-mode deny all
             // rule. This must never be removed, or otherwise usermode will be
@@ -2235,6 +2239,18 @@ pub mod kernel_protection_mml_epmp {
                 flash.0.pmpaddr(),
             );
 
+            // shadow memory at n - 3:
+            write_pmpaddr_pmpcfg(
+                AVAILABLE_ENTRIES - 4,
+                (pmpcfg_octet::a::NAPOT
+                    + pmpcfg_octet::r::SET
+                    + pmpcfg_octet::w::SET
+                    + pmpcfg_octet::x::CLEAR
+                    + pmpcfg_octet::l::SET)
+                    .into(),
+                NAPOTRegionSpec::from_start_size(0x88000000 as *const u8, 0x8000000).unwrap().pmpaddr(),
+            );
+
             // Finally, attempt to enable the MSECCFG security bits, and verify
             // that they have been set correctly. If they have not been set to
             // the written value, this means that this hardware either does not
@@ -2255,6 +2271,9 @@ pub mod kernel_protection_mml_epmp {
             if csr::CSR.mseccfg.get() != 0x00000003 {
                 return Err(());
             }
+
+            csr::CSR.mcounteren.set(0x1);
+            csr::CSR.scounteren.set(0x1);
 
             // Setup complete
             Ok(KernelProtectionMMLEPMP {

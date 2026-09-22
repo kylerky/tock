@@ -16,7 +16,7 @@ use riscv_csr::csr::{
     PMPADDR57, PMPADDR58, PMPADDR59, PMPADDR6, PMPADDR60, PMPADDR61, PMPADDR62, PMPADDR63,
     PMPADDR7, PMPADDR8, PMPADDR9, PMPCFG0, PMPCFG1, PMPCFG10, PMPCFG11, PMPCFG12, PMPCFG13,
     PMPCFG14, PMPCFG15, PMPCFG2, PMPCFG3, PMPCFG4, PMPCFG5, PMPCFG6, PMPCFG7, PMPCFG8, PMPCFG9,
-    STVEC, UTVEC,
+    STVEC, UTVEC, MCOUNTEREN, SCOUNTEREN,
 };
 use tock_registers::fields::FieldValue;
 use tock_registers::interfaces::{ReadWriteable, Readable, Writeable};
@@ -50,6 +50,9 @@ pub struct CSR {
     #[cfg(not(target_arch = "riscv64"))]
     pub mcycleh: ReadWriteRiscvCsr<usize, mcycle::mcycleh::Register, MCYCLEH>,
     pub mcycle: ReadWriteRiscvCsr<usize, mcycle::mcycle::Register, MCYCLE>,
+
+    pub mcounteren: ReadWriteRiscvCsr<usize, mcycle::mcycleh::Register, MCOUNTEREN>,
+    pub scounteren: ReadWriteRiscvCsr<usize, mcycle::mcycle::Register, SCOUNTEREN>,
 
     #[cfg(not(target_arch = "riscv64"))]
     pub pmpcfg0: ReadWriteRiscvCsr<usize, pmpconfig::pmpcfg::Register, PMPCFG0>,
@@ -168,6 +171,9 @@ pub const CSR: &CSR = &CSR {
     #[cfg(not(target_arch = "riscv64"))]
     mcycleh: ReadWriteRiscvCsr::new(),
     mcycle: ReadWriteRiscvCsr::new(),
+
+    mcounteren: ReadWriteRiscvCsr::new(),
+    scounteren: ReadWriteRiscvCsr::new(),
 
     pmpcfg0: ReadWriteRiscvCsr::new(),
     #[cfg(not(target_arch = "riscv64"))]
